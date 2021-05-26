@@ -6,6 +6,8 @@ import discord
 from dotenv import load_dotenv
 from discord.ext import commands
 
+import datetime
+
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -237,19 +239,6 @@ async def join(ctx):
     await msg.pin()
 
     f.close()
-
-# Start today's workout. 
-@bot.command(name="start")
-async def start(ctx):
-    # First, this command can't be run in either #server-access or #help. I want it to only be usable in DMs, prevents server clog.
-    if (ctx.message.channel.id == 844327265533165590) or (ctx.message.channel.id == 844328208350707712):
-        return
-
-    message = ctx.message
-    channel = ctx.channel
-    member = message.author
-
-    await member.send("Right now, this functionality is missing. Work in progress!")
 
 # Increases a lifts current training max (or TM). 
 @bot.command(name="increase")
@@ -499,5 +488,49 @@ async def improved(ctx):
     """.format(og_dead=og_deadlift, cur_dead=cur_deadlift, pc_dead=pc_dead, og_press = og_press, cur_press=cur_press, pc_press=pc_press, og_squat=og_squat, cur_squat=cur_squat, pc_squat=pc_squat, og_bench=og_bench, cur_bench=cur_bench, pc_bench=pc_bench)
 
     await member.send(change)
+
+# Start today's workout. 
+@bot.command(name="start")
+async def start(ctx):
+    # First, this command can't be run in either #server-access or #help. I want it to only be usable in DMs, prevents server clog.
+    if (ctx.message.channel.id == 844327265533165590) or (ctx.message.channel.id == 844328208350707712):
+        return
+
+    message = ctx.message
+    channel = ctx.channel
+    member = message.author
+    channel_id = channel.id
+
+    # Find the users ID and open their file. 
+    filename = "Users/" + str(channel_id) + ".txt"
+    f = open(filename, "r")
+
+    # Read the lines. We need to know everything for this command. 
+    lines = f.readlines()
+    deadlift = int(lines[1])
+    press = int(lines[2])
+    squat = int(lines[3])
+    bench = int(lines[4])
+    user_plan = lines[9] # This represents whether they picked a four, five, or six day plan. 
+
+    dayofweek = datetime.datetime.today().weekday()
+    
+    # Working out four days a week. 
+    if (user_plan == "four\n"):
+        if (dayofweek) not in (1, 2, 3, 4):
+            await member.send("You aren't working out today.")
+            return
+
+    elif (user_plan == "five\n"):
+        if (dayofweek) not in (0, 1, 2, 3, 4):
+            await member.send("You aren't working out today.")
+            return
+    
+    elif (user_plan == "six\n"):
+        if (dayofweek) not in (0, 1, 2, 3, 4, 5):
+            await member.send("You aren't working out today.")
+            return
+
+    await member.send("Right now, this functionality is missing. Work in progress!")
 
 bot.run(TOKEN)
