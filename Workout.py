@@ -14,6 +14,15 @@ intents = discord.Intents.default()
 intents.members = True
 bot = commands.Bot(command_prefix='!', intents=intents)
 
+# Thanks to Matt from this Stackoverflow post: https://stackoverflow.com/questions/30926840/how-to-check-change-between-two-values-in-percent/30926930
+def get_change(current, previous):
+    if current == previous:
+        return 0
+    try:
+        return round((abs(current - previous) / previous) * 100.0, 2)
+    except ZeroDivisionError:
+        return float('inf')
+
 
 @bot.event
 async def on_member_join(member):
@@ -194,6 +203,12 @@ async def join(ctx):
 
     bench = response
     f.write(response + "\n")
+
+    # Store the users ORIGINAL lifts. These never get updated, they are here to stay!
+    f.write(deadlift + "\n")
+    f.write(press + "\n")
+    f.write(squat + "\n")
+    f.write(bench + "\n")
 
     # Find how many days the users wants to work out. 
     await member.send("This program has three \"versions\" - a four day, five day, and a six day regimen. Which one of these do you want to do?")
@@ -443,6 +458,46 @@ async def decrease(ctx, arg1, arg2):
         Now: {new_val}\
     """.format(selected_lift=selected_lift, old_val=old_val, new_val=new_val)
     await member.send(updated)
-    
+
+# Informs the user how much they've improved since they started using the program.
+@bot.command(name="improved")
+async def improved(ctx):
+    # First, this command can't be run in either #server-access or #help. I want it to only be usable in DMs, prevents server clog.
+    if (ctx.message.channel.id == 844327265533165590) or (ctx.message.channel.id == 844328208350707712):
+        return
+
+    message = ctx.message
+    channel = ctx.channel
+    member = message.author
+    channel_id = channel.id
+
+    # Find the users ID and open their file. 
+    filename = "Users/" + str(channel_id) + ".txt"
+    f = open(filename, "r")
+
+    # Read the lines and find their lifts. 
+    lines = f.readlines()
+    cur_deadlift = int(lines[1])
+    og_deadlift = int(lines[5])
+    pc_dead = str(get_change(cur_deadlift, og_deadlift)) + "%"
+    cur_press = int(lines[2])
+    og_press = int(lines[6])
+    pc_press = str(get_change(cur_press, og_press)) + "%"
+    cur_squat = int(lines[3])
+    og_squat = int(lines[7])
+    pc_squat = str(get_change(cur_squat, og_squat)) + "%"
+    cur_bench = int(lines[4])
+    og_bench = int(lines[8])
+    pc_bench = str(get_change(cur_bench, og_bench)) + "%"
+
+    change = """\
+    Here's how much you've improved since you began using me.\n\
+    DEADLIFT - Originally {og_dead}, now {cur_dead}. That's a {pc_dead} increase!\n\
+    OVERHEAD PRESS - Originally {og_press}, now {cur_press}. That's a {pc_press} increase!\n\
+    SQUAT - Originally {og_squat}, now {cur_squat}. That's a {pc_squat} increase!\n\
+    BENCH PRESS - Originally {og_bench}, now {cur_bench}. That's a {pc_bench} increase!\n\
+    """.format(og_dead=og_deadlift, cur_dead=cur_deadlift, pc_dead=pc_dead, og_press = og_press, cur_press=cur_press, pc_press=pc_press, og_squat=og_squat, cur_squat=cur_squat, pc_squat=pc_squat, og_bench=og_bench, cur_bench=cur_bench, pc_bench=pc_bench)
+
+    await member.send(change)
 
 bot.run(TOKEN)
