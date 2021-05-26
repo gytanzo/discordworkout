@@ -521,11 +521,12 @@ async def start(ctx):
             await member.send("You aren't working out today.")
             return
 
+    # Working out five days a week. 
     elif (user_plan == "five\n"):
         if (dayofweek) not in (0, 1, 2, 3, 4):
             await member.send("You aren't working out today.")
             return
-    
+    # Working out six days a week. 
     elif (user_plan == "six\n"):
         if (dayofweek) not in (0, 1, 2, 3, 4, 5):
             await member.send("You aren't working out today.")
