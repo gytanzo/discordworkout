@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 from discord.ext import commands
 
 from datetime import datetime
-from helpers import get_change, check_unit, check_confirmation, check_number, check_day, convert_day_to_int
+from helpers import convert_int_to_day, get_change, check_unit, check_confirmation, check_number, check_day, convert_int_to_day
 import day4 as four
 import day5 as five
 import day6 as six
@@ -150,7 +150,7 @@ async def join(ctx):
     await member.send("This program has three \"versions\" - a four day, five day, and a six day regimen. Which one of these do you want to do?")
     msg = await bot.wait_for('message', check=check_day)
     while(msg.content.lower() != "yes"):
-        response = convert_day_to_int(msg.content)
+        response = convert_int_to_day(msg.content)
         await member.send("You answered \"" + msg.content + "\", meaning you will work out " + msg.content + " days a week. Is this correct?")
         msg = await bot.wait_for('message', check=check_confirmation)
         if (msg.content.lower() == "no"):
@@ -468,6 +468,52 @@ async def source(ctx):
     channel_id = channel.id
 
     await member.send("Link to the GitHub repository: https://github.com/gytanzo/discordworkout")
+
+# Allows the user to change what plan they are using. 
+@bot.command(name="plan")
+async def plan(ctx):
+    message = ctx.message
+    channel = ctx.channel
+    member = message.author
+    channel_id = channel.id
+
+    # Find the users ID and open their file. 
+    filename = "Users/" + str(channel_id) + ".txt"
+    f = open(filename, "r")
+
+    # Read the lines and find their lifts. 
+    lines = f.readlines()
+    user_plan = lines[9].rstrip("\n") # This represents whether they picked a four, five, or six day plan. 
+
+    # Basic conversation. 
+    await member.send("Right now, I can see that you are using the " + user_plan + " day plan.")
+    await member.send("Are you sure you want to change this? Please respond yes or no.")
+
+    # Wait for a response and react accordingly. 
+    msg = await bot.wait_for('message', check=check_confirmation)
+    if (msg.content.lower() == "no"):
+        await member.send("Okay, I'll keep you on the " + user_plan + " program.")
+        return
+    
+    # Accept the user's change of plan. 
+    await member.send("Alright, which plan do you want to change to?")
+    msg = await bot.wait_for('message', check=check_day)
+    while(msg.content.lower() != "yes"):
+        response = convert_int_to_day(msg.content)
+        await member.send("You answered \"" + msg.content + "\", meaning you will be changed to the " + msg.content + " day plan. Is this correct?")
+        msg = await bot.wait_for('message', check=check_confirmation)
+        if (msg.content.lower() == "no"):
+            await member.send("You responded no. Please respond with the number of days you wish to work out.")
+            msg = await bot.wait_for('message', check=check_day)
+
+    # Respond accordingly. 
+    await member.send("Got it, I've changed you to the " + response + " day plan.")
+
+    # Write to the file. 
+    lines[9] = response + "\n"
+    f = open(filename, "w")
+    f.writelines(lines)
+    f.close()
     
 
 bot.run(TOKEN)

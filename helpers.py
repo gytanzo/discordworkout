@@ -40,7 +40,7 @@ def check_day(m):
     if m.content.lower() in ("four", "five", "six", "4", "5", "6"):
         return True
 
-def convert_day_to_int(val):
+def convert_int_to_day(val):
     if val == "4":
         return "four"
     elif val == "5":
