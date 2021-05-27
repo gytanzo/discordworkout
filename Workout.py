@@ -449,9 +449,11 @@ async def start(ctx):
     if (user_plan == "four\n"):
         await four.workout(ctx, dayofweek)
 
+    # Working out five days a week. 
     elif (user_plan == "five\n"):
         await five.workout(ctx, dayofweek)
     
+    # Working out six days a week. 
     elif (user_plan == "six\n"):
         await six.workout(ctx, dayofweek)
     
