@@ -454,6 +454,20 @@ async def start(ctx):
     # Working out six days a week. 
     elif (user_plan == "six\n"):
         await six.workout(ctx, dayofweek)
+
+# Simply sends the user a link to the public GitHub repository.
+@bot.command(name="source")
+async def source(ctx):
+    # First, this command can't be run in either #server-access or #help. I want it to only be usable in DMs, prevents server clog.
+    if (ctx.message.channel.id == 844327265533165590) or (ctx.message.channel.id == 844328208350707712):
+        return
+
+    message = ctx.message
+    channel = ctx.channel
+    member = message.author
+    channel_id = channel.id
+
+    await member.send("Link to the GitHub repository: https://github.com/gytanzo/discordworkout")
     
 
 bot.run(TOKEN)
