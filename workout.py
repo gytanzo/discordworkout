@@ -425,8 +425,8 @@ async def improved(ctx):
     await member.send(change)
 
 # Start today's workout. 
-@bot.command(name="start")
-async def start(ctx):
+@bot.command(name="workout")
+async def workout(ctx):
     # First, this command can't be run in either #server-access or #help. I want it to only be usable in DMs, prevents server clog.
     if (ctx.message.channel.id == 844327265533165590) or (ctx.message.channel.id == 844328208350707712):
         return

@@ -115,7 +115,7 @@ async def tuesday(ctx):
     {t1_6}\n\
     {t1_7}\n\
     {t1_8}\n\
-    {t1_9}\n\n***T2 - SUMO DEADLIFT***\n\
+    {t1_9}+\n\n***T2 - SUMO DEADLIFT***\n\
     {t2_1}\n\
     {t2_2}\n\
     {t2_3}\n\
@@ -176,7 +176,7 @@ async def thursday(ctx):
     {t1_6}\n\
     {t1_7}\n\
     {t1_8}\n\
-    {t1_9}\n\n***T2 - CLOSE GRIP BENCH PRESS***\n\
+    {t1_9}+\n\n***T2 - CLOSE GRIP BENCH PRESS***\n\
     {t2_1}\n\
     {t2_2}\n\
     {t2_3}\n\
@@ -238,7 +238,7 @@ async def friday(ctx):
     {t1_6}\n\
     {t1_7}\n\
     {t1_8}\n\
-    {t1_9}\n\n***T2 - FRONT SQUAT***\n\
+    {t1_9}+\n\n***T2 - FRONT SQUAT***\n\
     {t2_1}\n\
     {t2_2}\n\
     {t2_3}\n\
