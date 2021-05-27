@@ -430,9 +430,7 @@ async def start(ctx):
     if (ctx.message.channel.id == 844327265533165590) or (ctx.message.channel.id == 844328208350707712):
         return
 
-    message = ctx.message
     channel = ctx.channel
-    member = message.author
     channel_id = channel.id
 
     # Find the users ID and open their file. 
