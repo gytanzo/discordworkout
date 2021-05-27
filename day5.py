@@ -60,7 +60,7 @@ async def monday(ctx):
     {t2_5}\n\
     {t2_6}\n\
     {t2_7}\n\
-    {t2_8}\
+    {t2_8}\n\nRecommended accessory work: Chest, arms, and back.\
     """.format(warmup1=warmup_1, warmup2=warmup_2, warmup3=warmup_3, t1_1=t1_1, t1_2=t1_2, t1_3=t1_3, t1_4=t1_4, t1_5=t1_5, t1_6=t1_6, t1_7=t1_7, t1_8=t1_8, t1_9=t1_9, t2_1=t2_1, t2_2=t2_2, t2_3=t2_3, t2_4=t2_4, t2_5=t2_5, t2_6=t2_6, t2_7=t2_7, t2_8=t2_8)
 
     # Send the user their workout. 
@@ -123,7 +123,7 @@ async def tuesday(ctx):
     {t2_5}\n\
     {t2_6}\n\
     {t2_7}\n\
-    {t2_8}\
+    {t2_8}\n\nRecommended accessory work: Legs and abs.\
     """.format(warmup1=warmup_1, warmup2=warmup_2, warmup3=warmup_3, t1_1=t1_1, t1_2=t1_2, t1_3=t1_3, t1_4=t1_4, t1_5=t1_5, t1_6=t1_6, t1_7=t1_7, t1_8=t1_8, t1_9=t1_9, t2_1=t2_1, t2_2=t2_2, t2_3=t2_3, t2_4=t2_4, t2_5=t2_5, t2_6=t2_6, t2_7=t2_7, t2_8=t2_8)
 
     await member.send(workout)
@@ -185,7 +185,7 @@ async def wednesday(ctx):
     {t2_5}\n\
     {t2_6}\n\
     {t2_7}\n\
-    {t2_8}\
+    {t2_8}\n\nRecommended accessory work: Shoulders and chest.\
     """.format(warmup1=warmup_1, warmup2=warmup_2, warmup3=warmup_3, t1_1=t1_1, t1_2=t1_2, t1_3=t1_3, t1_4=t1_4, t1_5=t1_5, t1_6=t1_6, t1_7=t1_7, t1_8=t1_8, t1_9=t1_9, t2_1=t2_1, t2_2=t2_2, t2_3=t2_3, t2_4=t2_4, t2_5=t2_5, t2_6=t2_6, t2_7=t2_7, t2_8=t2_8)
  
     await member.send(workout)
@@ -247,7 +247,7 @@ async def thursday(ctx):
     {t2_5}\n\
     {t2_6}\n\
     {t2_7}\n\
-    {t2_8}\
+    {t2_8}\n\nRecommended accessory work: Back and abs.\
     """.format(warmup1=warmup_1, warmup2=warmup_2, warmup3=warmup_3, t1_1=t1_1, t1_2=t1_2, t1_3=t1_3, t1_4=t1_4, t1_5=t1_5, t1_6=t1_6, t1_7=t1_7, t1_8=t1_8, t1_9=t1_9, t2_1=t2_1, t2_2=t2_2, t2_3=t2_3, t2_4=t2_4, t2_5=t2_5, t2_6=t2_6, t2_7=t2_7, t2_8=t2_8)
  
     await member.send(workout)
@@ -308,7 +308,7 @@ async def friday(ctx):
     {t2_5}\n\
     {t2_6}\n\
     {t2_7}\n\
-    {t2_8}\
+    {t2_8}\n\nRecommended accessory work: Arms and any other areas you think need work..\
     """.format(warmup1=warmup_1, warmup2=warmup_2, warmup3=warmup_3, t1_1=t1_1, t1_2=t1_2, t1_3=t1_3, t1_4=t1_4, t1_5=t1_5, t1_6=t1_6, t1_7=t1_7, t1_8=t1_8, t1_9=t1_9, t2_1=t2_1, t2_2=t2_2, t2_3=t2_3, t2_4=t2_4, t2_5=t2_5, t2_6=t2_6, t2_7=t2_7, t2_8=t2_8)
 
     await member.send(workout)

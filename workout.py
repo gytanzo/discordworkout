@@ -160,6 +160,7 @@ async def join(ctx):
     f.write(response + "\n")
 				
     await member.send("All set! I hope to see you for a workout soon!")
+    await member.send("If you need help learning how to use the program, respond to me with !tutorial.")
 
     # Send the user's initial (and in the future current) lifts.
     lifts = """\
@@ -472,6 +473,9 @@ async def source(ctx):
 # Allows the user to change what plan they are using. 
 @bot.command(name="plan")
 async def plan(ctx):
+    if (ctx.message.channel.id == 844327265533165590) or (ctx.message.channel.id == 844328208350707712):
+        return
+
     message = ctx.message
     channel = ctx.channel
     member = message.author
@@ -514,6 +518,25 @@ async def plan(ctx):
     f = open(filename, "w")
     f.writelines(lines)
     f.close()
+
+# Gives the user a tutorial on how to use the program.
+@bot.command(name="tutorial")
+async def tutorial(ctx):
+    if (ctx.message.channel.id == 844327265533165590) or (ctx.message.channel.id == 844328208350707712):
+        return
+
+    message = ctx.message
+    member = message.author
+
+    # I apologize for this blasphemy, it's the only way to get hte message to look the way I want it to look. 
+    tutorial = """
+	There are two functions you need to know about - !start and !increase.\n\nAt the beginning of your workout, use !start. I will respond with the entirety of your days workout. All values will be of the format [#1]x[#2]. The first number is the weight, the second is the number of reps. Pretty easy stuff. \n\nOne of your exercies will call for "1+" reps. This is your AMRAP set, and you should attempt to do as many reps as you can feasibly do. Do *not* go to failure, save some gas in the tank. Going to failure could result in injury, a poor remainder of your workout, or both.\n\nThe AMRAP set determines how much you increase the days T1 lift. Previously, I handled this automatically. I now believe that you should listen to your own body and come to your own conclusion as to how much weight you should progress by on a weekly basis.\n\nIf you truly want some advice, the original guideline was as follows:\n\
+		0-1 reps: Don't increase the TM.\n\
+		2-3 reps: Increase the TM by 5lb/2.5kg.\n\
+		4-5 reps: Increase the TM by 5-10lb/2.5-5kg.\n\
+		>5 reps: Increase the TM by 10-15lbs/5-7.5kg.\n\nThis works pretty well, especially if you're a beginner. However, there are a couple of problems with progressing in this manner as soon as you begin lifting at a remotely intermediate level that aren't worth getting into (if you're interested, ask me in #help). These days, I follow this guidance: "Five quality reps, five pounds."\n\nWhichever methodology you choose, just understand that now you are responsible for increasing your TM after each workout. This is done with the previously mentioned !increase command.\n\nThis command is also quite simple to use. For example, if after a bench press workout you believe you should increase your TM by ten pounds, just do !increase bench 10. The application will take care of the rest.\n\nThat should cover the basic functionality most people will need explaining. Once again, if you have any further questions, ask them in #help.
+	"""
     
+    await member.send(tutorial)
 
 bot.run(TOKEN)
