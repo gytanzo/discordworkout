@@ -6,8 +6,11 @@ import discord
 from dotenv import load_dotenv
 from discord.ext import commands
 
-import datetime
-
+from datetime import datetime
+from helpers import get_change, check_unit, check_confirmation, check_number, check_day, convert_day_to_int
+import day4 as four
+import day5 as five
+import day6 as six
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -16,23 +19,13 @@ intents = discord.Intents.default()
 intents.members = True
 bot = commands.Bot(command_prefix='!', intents=intents)
 
-# Thanks to Matt from this Stackoverflow post: https://stackoverflow.com/questions/30926840/how-to-check-change-between-two-values-in-percent/30926930
-def get_change(current, previous):
-    if current == previous:
-        return 0
-    try:
-        return round((abs(current - previous) / previous) * 100.0, 2)
-    except ZeroDivisionError:
-        return float('inf')
-
-
 @bot.event
 async def on_member_join(member):
     # When the user joins, give them a "Not Registered" role to limit their access to the first channel. 
     role = discord.utils.get(member.guild.roles, name='Not Registered')
     await member.add_roles(role)
 
-# Register with the program. Necessary to use the bot to begin with. 
+# Register sender with the program. 
 @bot.command(name="join")
 async def join(ctx):
     # If someone is trying to do this in the wrong channel, don't do anything. 
@@ -54,65 +47,6 @@ async def join(ctx):
     # Add a "Registered" role. 
     role = discord.utils.get(member.guild.roles, name='Registered')
     await member.add_roles(role)
-
-    # Checks if the user sent a valid unit of measurement.
-    def check_unit(m):
-        if m.content.lower() in ("kg", "lb"):
-            return True
-
-    # Checks for a yes or a no. 
-    def check_confirmation(m):
-        if m.content.lower() in ("yes", "no"):
-            return True
-
-    # Checks if the user sent a valid number. 
-    def check_number(m):
-        return m.content.isnumeric()
-
-    # Checks what kind of workout the user wants. 
-    def check_day(m):
-        if m.content.lower() in ("four", "five", "six", "4", "5", "6"):
-            return True
-
-    def check_setting(m):
-        if m.content.lower() in ("manual", "automatic"):
-            return True
-
-    def check_time(m):
-        time = m.content
-        bool = True
-        if (len(time) == 4):
-            if time[0].isnumeric() == False:
-                bool = False
-            if time[1] != ":":
-                bool = False
-            if time[2].isnumeric() == False:
-                bool = False
-            if time[3].isnumeric() == False:
-                bool = False
-        elif (len(time) == 5):
-            if time[0].isnumeric() == False:
-                bool = False
-            if time[1].isnumeric() == False:
-                bool = False
-            if time[2] != ":":
-                bool = False
-            if time[3].isnumeric() == False:
-                bool = False
-            if time[4].isnumeric() == False:
-                bool = False
-        else:
-            bool = False
-        return bool
-
-    def convert_day_to_int(val):
-        if val == "4":
-            return "four"
-        elif val == "5":
-            return "five"
-        elif val == "6":
-            return "six"
-        return val
 
     # Create a text file using the channel ID. In other words, the channel ID is the users account number!
     filename = "Users/" + str(channel_id) + ".txt"
@@ -308,15 +242,15 @@ async def increase(ctx, arg1, arg2):
     elif selected_lift == "press":
         press = press + int(arg2)
         lines[2] = str(press) + "\n"
-        new_val = deadlift
+        new_val = press
     elif selected_lift == "squat":
         squat = squat + int(arg2)
         lines[3] = str(squat) + "\n"
-        new_val = deadlift
+        new_val = squat
     elif selected_lift == "bench":
         bench = bench + int(arg2)
         lines[4] = str(bench)
-        new_val = deadlift
+        new_val = bench
 
     # Open the file again, this time to write. Re-make the file with the updated value. 
     f = open(filename, "w")
@@ -412,15 +346,15 @@ async def decrease(ctx, arg1, arg2):
     elif selected_lift == "press":
         press = press - int(arg2)
         lines[2] = str(press) + "\n"
-        new_val = deadlift
+        new_val = press
     elif selected_lift == "squat":
         squat = squat - int(arg2)
         lines[3] = str(squat) + "\n"
-        new_val = deadlift
+        new_val = squat
     elif selected_lift == "bench":
         bench = bench - int(arg2)
         lines[4] = str(bench)
-        new_val = deadlift
+        new_val = bench
 
     # Open the file again, this time to write. Re-make the file with the updated value. 
     f = open(filename, "w")
@@ -507,30 +441,19 @@ async def start(ctx):
 
     # Read the lines. We need to know everything for this command. 
     lines = f.readlines()
-    deadlift = int(lines[1])
-    press = int(lines[2])
-    squat = int(lines[3])
-    bench = int(lines[4])
     user_plan = lines[9] # This represents whether they picked a four, five, or six day plan. 
 
-    dayofweek = datetime.datetime.today().weekday()
+    dayofweek = datetime.today().weekday()
     
     # Working out four days a week. 
     if (user_plan == "four\n"):
-        if (dayofweek) not in (1, 2, 3, 4):
-            await member.send("You aren't working out today.")
-            return
+        await four.workout(ctx, dayofweek)
 
     elif (user_plan == "five\n"):
-        if (dayofweek) not in (0, 1, 2, 3, 4):
-            await member.send("You aren't working out today.")
-            return
+        await five.workout(ctx, dayofweek)
     
     elif (user_plan == "six\n"):
-        if (dayofweek) not in (0, 1, 2, 3, 4, 5):
-            await member.send("You aren't working out today.")
-            return
-
-    await member.send("Right now, this functionality is missing. Work in progress!")
+        await six.workout(ctx, dayofweek)
+    
 
 bot.run(TOKEN)
