@@ -3,12 +3,11 @@ from helpers import convert
 async def monday(ctx):
     # Gather all of the information we'll need.
     message = ctx.message
-    channel = ctx.channel
     member = message.author
-    channel_id = channel.id
+    user_id = member.id
 
     # Open and read the file. 
-    filename = "Users/" + str(channel_id) + ".txt"
+    filename = "Users/" + str(user_id) + ".txt"
     f = open(filename, "r")
     lines = f.readlines()
 
@@ -70,11 +69,10 @@ async def monday(ctx):
 
 async def tuesday(ctx):
     message = ctx.message
-    channel = ctx.channel
     member = message.author
-    channel_id = channel.id
+    user_id = member.id
 
-    filename = "Users/" + str(channel_id) + ".txt"
+    filename = "Users/" + str(user_id) + ".txt"
     f = open(filename, "r")
     lines = f.readlines()
 
@@ -132,11 +130,10 @@ async def tuesday(ctx):
 
 async def wednesday(ctx):
     message = ctx.message
-    channel = ctx.channel
     member = message.author
-    channel_id = channel.id
+    user_id = member.id
 
-    filename = "Users/" + str(channel_id) + ".txt"
+    filename = "Users/" + str(user_id) + ".txt"
     f = open(filename, "r")
     lines = f.readlines()
 
@@ -194,11 +191,10 @@ async def wednesday(ctx):
 
 async def thursday(ctx):
     message = ctx.message
-    channel = ctx.channel
     member = message.author
-    channel_id = channel.id
+    user_id = member.id
 
-    filename = "Users/" + str(channel_id) + ".txt"
+    filename = "Users/" + str(user_id) + ".txt"
     f = open(filename, "r")
     lines = f.readlines()
 
@@ -256,11 +252,10 @@ async def thursday(ctx):
     
 async def friday(ctx):
     message = ctx.message
-    channel = ctx.channel
     member = message.author
-    channel_id = channel.id
+    user_id = member.id
 
-    filename = "Users/" + str(channel_id) + ".txt"
+    filename = "Users/" + str(user_id) + ".txt"
     f = open(filename, "r")
     lines = f.readlines()
 

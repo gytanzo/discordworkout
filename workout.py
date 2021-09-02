@@ -33,9 +33,8 @@ async def join(ctx):
         return
 
     message = ctx.message
-    channel = ctx.channel
     member = message.author
-    channel_id = channel.id
+    user_id = member.id
 
     # Delete the message. 
     await message.delete()
@@ -49,7 +48,7 @@ async def join(ctx):
     await member.add_roles(role)
 
     # Create a text file using the channel ID. In other words, the channel ID is the users account number!
-    filename = "Users/" + str(channel_id) + ".txt"
+    filename = "Users/" + str(user_id) + ".txt"
 
     # Open the file that will store the information provided by the user.
     f = open(filename, "w")
@@ -185,7 +184,7 @@ async def increase(ctx, arg1, arg2):
     message = ctx.message
     channel = ctx.channel
     member = message.author
-    channel_id = channel.id
+    user_id = member.id
 
     # Check if the first argument is valid.
     if arg1 not in ("deadlift", "press", "squat", "bench"):
@@ -193,7 +192,8 @@ async def increase(ctx, arg1, arg2):
         return
 
     # Find the users ID and open their file. 
-    filename = "Users/" + str(channel_id) + ".txt"
+    filename = "Users/" + str(user_id) + ".txt"
+    print(user_id)
     f = open(filename, "r")
 
     # Read the lines and find their lifts. 
@@ -250,7 +250,7 @@ async def increase(ctx, arg1, arg2):
         new_val = squat
     elif selected_lift == "bench":
         bench = bench + int(arg2)
-        lines[4] = str(bench)
+        lines[4] = str(bench) + "\n"
         new_val = bench
 
     # Open the file again, this time to write. Re-make the file with the updated value. 
@@ -289,7 +289,7 @@ async def decrease(ctx, arg1, arg2):
     message = ctx.message
     channel = ctx.channel
     member = message.author
-    channel_id = channel.id
+    user_id = member.id
 
     # Check if the first argument is valid.
     if arg1 not in ("deadlift", "press", "squat", "bench"):
@@ -297,7 +297,7 @@ async def decrease(ctx, arg1, arg2):
         return
 
     # Find the users ID and open their file. 
-    filename = "Users/" + str(channel_id) + ".txt"
+    filename = "Users/" + str(user_id) + ".txt"
     f = open(filename, "r")
 
     # Read the lines and find their lifts. 
@@ -354,7 +354,7 @@ async def decrease(ctx, arg1, arg2):
         new_val = squat
     elif selected_lift == "bench":
         bench = bench - int(arg2)
-        lines[4] = str(bench)
+        lines[4] = str(bench) + "\n"
         new_val = bench
 
     # Open the file again, this time to write. Re-make the file with the updated value. 
@@ -391,12 +391,11 @@ async def improved(ctx):
         return
 
     message = ctx.message
-    channel = ctx.channel
     member = message.author
-    channel_id = channel.id
+    user_id = member.id
 
     # Find the users ID and open their file. 
-    filename = "Users/" + str(channel_id) + ".txt"
+    filename = "Users/" + str(user_id) + ".txt"
     f = open(filename, "r")
 
     # Read the lines and find their lifts. 
@@ -431,11 +430,12 @@ async def workout(ctx):
     if (ctx.message.channel.id == 844327265533165590) or (ctx.message.channel.id == 844328208350707712):
         return
 
-    channel = ctx.channel
-    channel_id = channel.id
+    message = ctx.message
+    member = message.author
+    user_id = member.id
 
     # Find the users ID and open their file. 
-    filename = "Users/" + str(channel_id) + ".txt"
+    filename = "Users/" + str(user_id) + ".txt"
     f = open(filename, "r")
 
     # Read the lines. We need to know everything for this command. 
@@ -466,7 +466,6 @@ async def source(ctx):
     message = ctx.message
     channel = ctx.channel
     member = message.author
-    channel_id = channel.id
 
     await member.send("Link to the GitHub repository: https://github.com/gytanzo/discordworkout")
 
@@ -479,10 +478,10 @@ async def plan(ctx):
     message = ctx.message
     channel = ctx.channel
     member = message.author
-    channel_id = channel.id
+    user_id = member.id
 
     # Find the users ID and open their file. 
-    filename = "Users/" + str(channel_id) + ".txt"
+    filename = "Users/" + str(user_id) + ".txt"
     f = open(filename, "r")
 
     # Read the lines and find their lifts. 
