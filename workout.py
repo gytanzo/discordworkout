@@ -78,7 +78,7 @@ async def join(ctx):
     # The next step is finding the 1RMs for each of the four big lifts: deadlift, overhead press, squat, and bench press. 
 
     deadlift = ""
-    press = ""
+    overhead = ""
     squat = ""
     bench = ""
 
@@ -108,7 +108,7 @@ async def join(ctx):
             await member.send("You responded no. Please respond with your overhead press 1RM.")
             msg = await bot.wait_for('message', check=check_number)
 
-    press = response
+    overhead = response
     f.write(response + "\n")
 
     # Then is squat. 
@@ -141,7 +141,7 @@ async def join(ctx):
 
     # Store the users ORIGINAL lifts. These never get updated, they are here to stay!
     f.write(deadlift + "\n")
-    f.write(press + "\n")
+    f.write(overhead + "\n")
     f.write(squat + "\n")
     f.write(bench + "\n")
 
@@ -165,10 +165,10 @@ async def join(ctx):
     lifts = """\
     Your current lifts are...\n\
     DEADLIFT - {deadlift}\n\
-    OVERHEAD PRESS - {press}\n\
+    OVERHEAD PRESS - {overhead}\n\
     SQUAT - {squat}\n\
     BENCH PRESS - {bench}\
-    """.format(deadlift=deadlift, press=press, squat=squat, bench=bench)
+    """.format(deadlift=deadlift, overhead=overhead, squat=squat, bench=bench)
     msg = await member.send(lifts)
     await msg.pin()
 
@@ -187,8 +187,8 @@ async def increase(ctx, arg1, arg2):
     user_id = member.id
 
     # Check if the first argument is valid.
-    if arg1 not in ("deadlift", "press", "squat", "bench"):
-        await member.send("Your first argument was invalid. Please try again, using one of these four accepted values: \"deadlift\", \"press\", \"squat\", or \"bench\".")
+    if arg1 not in ("deadlift", "overhead", "squat", "bench"):
+        await member.send("Your first argument was invalid. Please try again, using one of these four accepted values: \"deadlift\", \"overhead\", \"squat\", or \"bench\".")
         return
 
     # Find the users ID and open their file. 
@@ -199,7 +199,7 @@ async def increase(ctx, arg1, arg2):
     # Read the lines and find their lifts. 
     lines = f.readlines()
     deadlift = int(lines[1])
-    press = int(lines[2])
+    overhead = int(lines[2])
     squat = int(lines[3])
     bench = int(lines[4])
 
@@ -209,9 +209,9 @@ async def increase(ctx, arg1, arg2):
     if arg1.lower() == "deadlift":
         selected_lift = "deadlift"
         selected_val = deadlift
-    elif arg1.lower() == "press":
-        selected_lift = "press"
-        selected_val = press
+    elif arg1.lower() == "overhead":
+        selected_lift = "overhead"
+        selected_val = overhead
     elif arg1.lower() == "squat":
         selected_lift = "squat"
         selected_val = squat
@@ -240,10 +240,11 @@ async def increase(ctx, arg1, arg2):
         deadlift = deadlift + int(arg2)
         lines[1] = str(deadlift) + "\n"
         new_val = deadlift
-    elif selected_lift == "press":
-        press = press + int(arg2)
-        lines[2] = str(press) + "\n"
-        new_val = press
+    elif selected_lift == "overhead":
+        overhead = overhead + int(arg2)
+        lines[2] = str(overhead) + "\n"
+        new_val = overhead
+        selected_lift = "overhead press"
     elif selected_lift == "squat":
         squat = squat + int(arg2)
         lines[3] = str(squat) + "\n"
@@ -252,6 +253,7 @@ async def increase(ctx, arg1, arg2):
         bench = bench + int(arg2)
         lines[4] = str(bench) + "\n"
         new_val = bench
+        selected_lift = "bench press"
 
     # Open the file again, this time to write. Re-make the file with the updated value. 
     f = open(filename, "w")
@@ -262,10 +264,10 @@ async def increase(ctx, arg1, arg2):
     lifts = """\
     Your current lifts are...\n\
     DEADLIFT - {deadlift}\n\
-    OVERHEAD PRESS - {press}\n\
+    OVERHEAD PRESS - {overhead}\n\
     SQUAT - {squat}\n\
     BENCH PRESS - {bench}\
-    """.format(deadlift=deadlift, press=press, squat=squat, bench=bench)
+    """.format(deadlift=deadlift, overhead=overhead, squat=squat, bench=bench)
 
     # Edit the message. 
     msg_to_edit = (await channel.pins())[0]
@@ -292,8 +294,8 @@ async def decrease(ctx, arg1, arg2):
     user_id = member.id
 
     # Check if the first argument is valid.
-    if arg1 not in ("deadlift", "press", "squat", "bench"):
-        await member.send("Your first argument was invalid. Please try again, using one of these four accepted values: \"deadlift\", \"press\", \"squat\", or \"bench\".")
+    if arg1 not in ("deadlift", "overhead", "squat", "bench"):
+        await member.send("Your first argument was invalid. Please try again, using one of these four accepted values: \"deadlift\", \"overhead\", \"squat\", or \"bench\".")
         return
 
     # Find the users ID and open their file. 
@@ -303,7 +305,7 @@ async def decrease(ctx, arg1, arg2):
     # Read the lines and find their lifts. 
     lines = f.readlines()
     deadlift = int(lines[1])
-    press = int(lines[2])
+    overhead = int(lines[2])
     squat = int(lines[3])
     bench = int(lines[4])
 
@@ -313,9 +315,9 @@ async def decrease(ctx, arg1, arg2):
     if arg1.lower() == "deadlift":
         selected_lift = "deadlift"
         selected_val = deadlift
-    elif arg1.lower() == "press":
-        selected_lift = "press"
-        selected_val = press
+    elif arg1.lower() == "overhead":
+        selected_lift = "overhead"
+        selected_val = overhead
     elif arg1.lower() == "squat":
         selected_lift = "squat"
         selected_val = squat
@@ -344,10 +346,11 @@ async def decrease(ctx, arg1, arg2):
         deadlift = deadlift - int(arg2)
         lines[1] = str(deadlift) + "\n"
         new_val = deadlift
-    elif selected_lift == "press":
-        press = press - int(arg2)
-        lines[2] = str(press) + "\n"
-        new_val = press
+    elif selected_lift == "overhead":
+        overhead = overhead - int(arg2)
+        lines[2] = str(overhead) + "\n"
+        new_val = overhead
+        selected_lift = "overhead press"
     elif selected_lift == "squat":
         squat = squat - int(arg2)
         lines[3] = str(squat) + "\n"
@@ -356,6 +359,7 @@ async def decrease(ctx, arg1, arg2):
         bench = bench - int(arg2)
         lines[4] = str(bench) + "\n"
         new_val = bench
+        selected_lift = "bench press"
 
     # Open the file again, this time to write. Re-make the file with the updated value. 
     f = open(filename, "w")
@@ -366,10 +370,10 @@ async def decrease(ctx, arg1, arg2):
     lifts = """\
     Your current lifts are...\n\
     DEADLIFT - {deadlift}\n\
-    OVERHEAD PRESS - {press}\n\
+    OVERHEAD PRESS - {overhead}\n\
     SQUAT - {squat}\n\
     BENCH PRESS - {bench}\
-    """.format(deadlift=deadlift, press=press, squat=squat, bench=bench)
+    """.format(deadlift=deadlift, overhead=overhead, squat=squat, bench=bench)
 
     # Edit the message. 
     msg_to_edit = (await channel.pins())[0]
@@ -403,9 +407,9 @@ async def improved(ctx):
     cur_deadlift = int(lines[1])
     og_deadlift = int(lines[5])
     pc_dead = str(get_change(cur_deadlift, og_deadlift)) + "%"
-    cur_press = int(lines[2])
-    og_press = int(lines[6])
-    pc_press = str(get_change(cur_press, og_press)) + "%"
+    cur_overhead = int(lines[2])
+    og_overhead = int(lines[6])
+    pc_overhead = str(get_change(cur_overhead, og_overhead)) + "%"
     cur_squat = int(lines[3])
     og_squat = int(lines[7])
     pc_squat = str(get_change(cur_squat, og_squat)) + "%"
@@ -416,10 +420,10 @@ async def improved(ctx):
     change = """\
     Here's how much you've improved since you began using me.\n\
     DEADLIFT - Originally {og_dead}, now {cur_dead}. That's a {pc_dead} increase!\n\
-    OVERHEAD PRESS - Originally {og_press}, now {cur_press}. That's a {pc_press} increase!\n\
+    OVERHEAD PRESS - Originally {og_overhead}, now {cur_overhead}. That's a {pc_overhead} increase!\n\
     SQUAT - Originally {og_squat}, now {cur_squat}. That's a {pc_squat} increase!\n\
     BENCH PRESS - Originally {og_bench}, now {cur_bench}. That's a {pc_bench} increase!\n\
-    """.format(og_dead=og_deadlift, cur_dead=cur_deadlift, pc_dead=pc_dead, og_press = og_press, cur_press=cur_press, pc_press=pc_press, og_squat=og_squat, cur_squat=cur_squat, pc_squat=pc_squat, og_bench=og_bench, cur_bench=cur_bench, pc_bench=pc_bench)
+    """.format(og_dead=og_deadlift, cur_dead=cur_deadlift, pc_dead=pc_dead, og_overhead = og_overhead, cur_overhead=cur_overhead, pc_overhead=pc_overhead, og_squat=og_squat, cur_squat=cur_squat, pc_squat=pc_squat, og_bench=og_bench, cur_bench=cur_bench, pc_bench=pc_bench)
 
     await member.send(change)
 
